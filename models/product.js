@@ -28,6 +28,11 @@ module.exports = (sequelize, DataTypes) => {
       foreignKey: "kategori_id",
       as: "kategori",
     });
+
+    product.hasOne(models.stock, {
+      foreignKey: "product_id",
+      as: "stock",
+    });
   };
   return product;
 };
