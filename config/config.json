@@ -1,0 +1,23 @@
+{
+  "development": {
+    "username": "root",
+    "password": "ZhenDeux@102",
+    "database": "novatech_development",
+    "host": "127.0.0.1",
+    "dialect": "mysql"
+  },
+  "test": {
+    "username": "root",
+    "password": "ZhenDeux@102",
+    "database": "novatech_test",
+    "host": "127.0.0.1",
+    "dialect": "mysql"
+  },
+  "production": {
+    "username": "root",
+    "password": "ZhenDeux@102",
+    "database": "novatech_production",
+    "host": "127.0.0.1",
+    "dialect": "mysql"
+  }
+}
