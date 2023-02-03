@@ -4,18 +4,18 @@ const { Sequelize } = require("sequelize");
 module.exports = {
   getStock: async (req, res) => {
     // IF JUST TO SEE RESULT FROM STOCK TABLE
-    // const allStock = await stock.findAll();
+    const allStock = await stock.findAll();
 
     //STOCK + PRODUCT TABLE ()
-    const allStock = await stock.findAll({
-      include: {
-        model: product,
-        as: "product",
-        where: {
-          state: Sequelize.col("product.id"),
-        },
-      },
-    });
+    // const allStock = await stock.findAll({
+    //   include: {
+    //     model: product,
+    //     as: "product",
+    //     where: {
+    //       state: Sequelize.col("product.id"),
+    //     },
+    //   },
+    // });
 
     if (allStock.length < 1) {
       return res.status(404).json({

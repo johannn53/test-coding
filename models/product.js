@@ -24,14 +24,17 @@ module.exports = (sequelize, DataTypes) => {
     }
   );
   product.associate = function (models) {
-    product.belongsTo(models.kategories, {
-      foreignKey: "kategori_id",
-      as: "kategori",
-    });
+    // product.belongsTo(models.kategories, {
+    //   foreignKey: "kategori_id",
+    //   as: "kategori",
+    // });
 
     product.hasOne(models.stock, {
-      foreignKey: "product_id",
-      as: "stock",
+      foreignKey: {
+        name: "product_id",
+        allowNull: false,
+      },
+      as: "productId",
     });
   };
   return product;

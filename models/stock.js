@@ -1,5 +1,6 @@
 "use strict";
 const { Model } = require("sequelize");
+const product = require("./product");
 module.exports = (sequelize, DataTypes) => {
   class stock extends Model {
     /**
@@ -21,9 +22,14 @@ module.exports = (sequelize, DataTypes) => {
       modelName: "stock",
     }
   );
+  // stock.belongsTo(product, { foreignKey: "product_id" });
+
   stock.associate = function (models) {
     stock.belongsTo(models.product, {
-      foreignKey: "product_id",
+      foreignKey: {
+        name: "product_id",
+        allowNull: false,
+      },
       as: "product",
     });
   };
