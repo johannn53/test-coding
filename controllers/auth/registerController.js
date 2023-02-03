@@ -23,57 +23,106 @@ module.exports = {
           message: "fill password",
         });
       }
-      if (password != rePassword) {
+      if (password == "") {
         return res.status(401).json({
-          status: 401,
+          status: 400,
           message: "wrong password / username",
         });
       }
 
       //CHECK EMAIL EXIST
-      const checkEmail = await user.findOne({
-        where: {
-          email: email,
-        },
-      });
-      if (checkEmail != null) {
-        return res.status(409).json({
-          status: 409,
-          message: "email already exist",
-        });
-      }
+      //   const checkEmail = await user.findOne({
+      //     where: {
+      //       email: email,
+      //     },
+      //   });
+      //   if (checkEmail != null) {
+      //     return res.status(409).json({
+      //       status: 409,
+      //       message: "email already exist",
+      //     });
+      //   }
 
-      //CHECK PASSWORD STRENGTH
-      function validatePassword(password) {
-        let pattern = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d]{5,}$/;
-        return pattern.test(password);
-      }
-      if (!password.match(validatePassword)) {
-        return res.status(400).json({
-          status: 400,
-          message:
-            "password must be minimum 5 characters, contain 1 uppercase, 1 lowercase, 1  special character, 1 number",
-        });
-      }
+      //   //CHECK PASSWORD STRENGTH
+      //   function validatePassword(password) {
+      //     let pattern = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d]{5,}$/;
+      //     return pattern.test(password);
+      //   }
+      //   if (!password.match(validatePassword)) {
+      //     return res.status(400).json({
+      //       status: 400,
+      //       message:
+      //         "password must be minimum 5 characters, contain 1 uppercase, 1 lowercase, 1  special character, 1 number",
+      //     });
+      //   }
 
-      //ENCRYPTED PASSWORD
-      const encryptedPassword = bcrypt.hashSync(password, 10);
+      //   //ENCRYPTED PASSWORD
+      //   const encryptedPassword = bcrypt.hashSync(password, 10);
 
-      dataRegist = {
-        name: name,
+      //   dataRegist = {
+      //     name: name,
+      //     email: email,
+      //     password: encryptedPassword,
+      //     roles: "user",
+      //     createdAt: new Date(),
+      //   };
+
+      //   const makeUser = await user.create(dataRegist);
+      //   if (makeUser == null) {
+      //     return res.status(500).json({
+      //       status: 500,
+      //       message: "error registering",
+      //     });
+      //   }
+    }
+    const checkEmail = await user.findOne({
+      where: {
         email: email,
-        password: encryptedPassword,
-        roles: "user",
-        createdAt: new Date(),
-      };
+      },
+    });
+    if (checkEmail != null) {
+      return res.status(409).json({
+        status: 409,
+        message: "email already exist",
+      });
+    }
 
-      const makeUser = await user.create(dataRegist);
-      if (makeUser == null) {
-        return res.status(500).json({
-          status: 500,
-          message: "error registering",
-        });
-      }
+    //CHECK PASSWORD STRENGTH
+    if (
+      !password.match(/^(?=.*[0-9])(?=.*[!@#$%^&*])[a-zA-Z0-9!@#$%^&*]{4,6}$/)
+    ) {
+      return res.status(500).json({
+        status: 500,
+        message:
+          "minimum password length is 4 and max 6. Must contain 1 UPPERCASE, 1 LOWERCASE and special characters(!@#$%^)",
+      });
+    }
+
+    //CHECK rePASSWORD MATCH
+    if (password != rePassword) {
+      return res.status(401).json({
+        status: 401,
+        message: "password does not match",
+      });
+    }
+
+    //ENCRYPTED PASSWORD
+    const encryptedPassword = bcrypt.hashSync(password, 10);
+
+    dataRegist = {
+      name: name,
+      email: email,
+      password: encryptedPassword,
+      roles: "user",
+      createdAt: new Date(),
+    };
+
+    const makeUser = await user.create(dataRegist);
+    if (makeUser == null) {
+      return res.status(500).json({
+        status: 500,
+        message: "error registering",
+      });
     }
     res.status(200).json({
       status: 200,
