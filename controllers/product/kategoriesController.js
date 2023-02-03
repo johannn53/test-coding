@@ -1,4 +1,4 @@
-const { kategories } = require("../models");
+const { kategories } = require("../../models");
 const sequelize = require("sequelize");
 const { Op } = require("sequelize");
 

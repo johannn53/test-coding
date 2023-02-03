@@ -25,11 +25,15 @@ module.exports = (sequelize, DataTypes) => {
   // stock.belongsTo(product, { foreignKey: "product_id" });
 
   stock.associate = function (models) {
+    // stock.belongsTo(models.product, {
+    //   foreignKey: {
+    //     name: "product_id",
+    //     allowNull: false,
+    //   },
+    //   as: "product",
+    // });
     stock.belongsTo(models.product, {
-      foreignKey: {
-        name: "product_id",
-        allowNull: false,
-      },
+      foreignKey: "product_id",
       as: "product",
     });
   };

@@ -1,4 +1,4 @@
-const { product, stock } = require("../models");
+const { product, stock } = require("../../models");
 const { Sequelize } = require("sequelize");
 
 module.exports = {
@@ -9,7 +9,7 @@ module.exports = {
     //   include: [
     //     {
     //       model: stock,
-    //       as: "productId",
+    //       as: "stock",
     //     },
     //   ],
     // });
