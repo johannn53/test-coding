@@ -53,7 +53,7 @@ module.exports = {
         type: "access_token",
       },
       secretKey,
-      { expiresIn: "5m" }
+      { expiresIn: "20m" }
     );
 
     const refreshToken = jwt.sign(
@@ -70,9 +70,9 @@ module.exports = {
     res.status(200).json({
       status: 200,
       message: "Success Login",
-      // id: data.id,
-      // access_token: accessToken,
-      // refresh_token: refreshToken,
+      id: data.id,
+      access_token: accessToken,
+      refresh_token: refreshToken,
     });
   },
 };

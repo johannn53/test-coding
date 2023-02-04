@@ -1,85 +1,111 @@
 const { user } = require("../models");
-const jwt = require("jsonwebtoken");
 require("dotenv").config();
 
-const secretKey = process.env.SECRET_KEY_JWT;
+const bcrypt = require("bcrypt");
 
 module.exports = {
-  loginUser: async (req, res) => {
-    const { name = "", password = "" } = req.body;
-    if (name == "" || password == "") {
+  getAllUser: async (req, res) => {
+    const get = await user.findAll();
+    res.status(200).json({
+      status: 200,
+      message: "Success get data",
+      response: get,
+    });
+  },
+  updateUser: async (req, res) => {
+    const { id } = req.params;
+
+    const { name = "", email = "", password = "", rePassword = "" } = req.body;
+    if (name == "" || email == "" || password == "" || rePassword == "") {
       if (name == "") {
-        return res.status(500).json({
-          status: 500,
+        return res.status(400).json({
+          status: 400,
           message: "fill name",
         });
       }
+      if (email == "") {
+        return res.status(400).json({
+          status: 400,
+          message: "fill email",
+        });
+      }
       if (password == "") {
-        return res.status(500).json({
-          status: 500,
+        return res.status(400).json({
+          status: 400,
           message: "fill password",
+        });
+      }
+      if (rePassword == "") {
+        return res.status(401).json({
+          status: 400,
+          message: "fill re-entered password",
         });
       }
     }
 
-    //CHECK USER EXIST
-    const data = await user.findOne({
+    //CHECK EMAIL
+    const checkEmail = await user.findOne({
       where: {
-        name: name,
+        email: email,
       },
     });
-    if (!data) {
-      return res.status(404).json({
-        status: 404,
-        message: "account not found",
+    if (checkEmail != null) {
+      return res.status(409).json({
+        status: 409,
+        message: "email already exist",
       });
     }
 
     //CHECK PASSWORD MATCH
-    if (password != data.dataValues.password) {
-      return res.status(403).json({
-        status: 403,
-        message: "wrong name / password",
+    if (password != rePassword) {
+      return res.status(400).json({
+        status: 400,
+        message: "password does not match",
       });
     }
 
-    //MAKE TOKEN
-    const accessToken = jwt.sign(
-      {
-        id: data.id,
-        name: data.name,
-        roles: data.roles,
-        type: "access_token",
-      },
-      secretKey,
-      { expiresIn: "5m" }
-    );
+    //ENCRYPT PASSWORD
+    const encryptedPassword = bcrypt.hashSync(password, 12);
 
-    const refreshToken = jwt.sign(
-      {
-        id: data.id,
-        name: data.name,
-        roles: data.roles,
-        type: "refresh_token",
+    //UPDATE
+    const update = {
+      name: name,
+      email: email,
+      password: encryptedPassword,
+    };
+    const saveUpdate = await user.update(update, {
+      where: {
+        id: id,
       },
-      secretKey,
-      { expiresIn: "3d" }
-    );
+    });
+    if (!saveUpdate) {
+      res.status(500).json({
+        status: 500,
+        message: "failed update",
+      });
+    }
 
     res.status(200).json({
       status: 200,
-      message: "success login",
-      id: data.id,
-      access_token: accessToken,
-      refresh_token: refreshToken,
+      message: "success updating",
     });
   },
-  getAll: async (req, res) => {
-    const get = await user.findAll();
+  deleteUser: async (req, res) => {
+    const { id } = req.params;
+    const delUser = await user.destroy({
+      where: {
+        id: id,
+      },
+    });
+    if (!delUser) {
+      return res.status(404).json({
+        status: 404,
+        message: `no account with id ${id} found`,
+      });
+    }
     res.status(200).json({
       status: 200,
-      message: "ok",
-      response: get,
+      message: "Success delete user",
     });
   },
 };

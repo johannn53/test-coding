@@ -3,25 +3,8 @@ const { Sequelize } = require("sequelize");
 
 module.exports = {
   getStock: async (req, res) => {
-    // IF JUST TO SEE RESULT FROM STOCK TABLE
+    // // IF JUST TO SEE RESULT FROM STOCK TABLE
     // const allStock = await stock.findAll();
-
-    //SEE ALL DETAILED RESULT
-    // const allStock = await stock.findAll({
-    //   include: [
-    //     {
-    //       model: product,
-    //       required: true,
-    //       include: [
-    //         {
-    //           model: kategories,
-    //           distinct: true,
-    //           required: true,
-    //         },
-    //       ],
-    //     },
-    //   ],
-    // });
 
     const allStock = await stock.findAll({
       attributes: [["stock", "stock"]],
@@ -56,7 +39,7 @@ module.exports = {
     res.status(200).json({
       status: 200,
       message: "success get data",
-      // response: allStock,
+      response: allStock,
     });
   },
 };

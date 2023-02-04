@@ -139,7 +139,7 @@ module.exports = {
 
     res.status(200).json({
       status: 200,
-      message: "oke",
+      message: "success get data",
       response: allInfo,
     });
   },

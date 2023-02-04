@@ -1,4 +1,4 @@
-const { product, stock, kategories } = require("../../models");
+const { product, kategories } = require("../../models");
 const { Sequelize } = require("sequelize");
 
 module.exports = {
@@ -15,7 +15,7 @@ module.exports = {
     res.status(200).json({
       status: 200,
       message: "success get data",
-      // response: allProd,
+      response: allProd,
     });
   },
 
