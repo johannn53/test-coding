@@ -8,6 +8,21 @@ module.exports = (sequelize, DataTypes) => {
      * The `models/index` file will call this method automatically.
      */
     static associate(models) {
+      product.hasOne(models.stock, {
+        foreignKey: {
+          name: "id",
+        },
+      });
+      product.hasMany(models.stock, {
+        foreignKey: {
+          name: "id",
+        },
+      });
+      product.belongsTo(models.kategories, {
+        foreignKey: {
+          name: "kategori_id",
+        },
+      });
       // define association here
     }
   }
@@ -23,22 +38,22 @@ module.exports = (sequelize, DataTypes) => {
       modelName: "product",
     }
   );
-  product.associate = function (models) {
-    product.belongsTo(models.kategories, {
-      foreignKey: "kategori_id",
-      as: "kategori",
-    });
-    //   product.hasOne(models.stock, {
-    //     foreignKey: {
-    //       name: "product_id",
-    //       allowNull: false,
-    //     },
-    //     as: "productId",
-    //   });
-    product.hasOne(models.stock, {
-      foreignKey: "product_id",
-      as: "stock",
-    });
-  };
+  // product.associate = function (models) {
+  //   product.belongsTo(models.kategories, {
+  //     foreignKey: "kategori_id",
+  //     as: "kategori",
+  //   });
+  //   //   product.hasOne(models.stock, {
+  //   //     foreignKey: {
+  //   //       name: "product_id",
+  //   //       allowNull: false,
+  //   //     },
+  //   //     as: "productId",
+  //   //   });
+  //   product.hasOne(models.stock, {
+  //     foreignKey: "product_id",
+  //     as: "stock",
+  //   });
+  // };
   return product;
 };

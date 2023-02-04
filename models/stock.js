@@ -1,6 +1,6 @@
 "use strict";
 const { Model } = require("sequelize");
-const product = require("./product");
+// const product = require("./product");
 module.exports = (sequelize, DataTypes) => {
   class stock extends Model {
     /**
@@ -9,6 +9,16 @@ module.exports = (sequelize, DataTypes) => {
      * The `models/index` file will call this method automatically.
      */
     static associate(models) {
+      stock.belongsTo(models.product, {
+        foreignKey: {
+          name: "product_id",
+        },
+      });
+      stock.hasOne(models.product, {
+        foreignKey: {
+          name: "id",
+        },
+      });
       // define association here
     }
   }
@@ -24,18 +34,18 @@ module.exports = (sequelize, DataTypes) => {
   );
   // stock.belongsTo(product, { foreignKey: "product_id" });
 
-  stock.associate = function (models) {
-    // stock.belongsTo(models.product, {
-    //   foreignKey: {
-    //     name: "product_id",
-    //     allowNull: false,
-    //   },
-    //   as: "product",
-    // });
-    stock.belongsTo(models.product, {
-      foreignKey: "product_id",
-      as: "product",
-    });
-  };
+  // stock.associate = function (models) {
+  //   // stock.belongsTo(models.product, {
+  //   //   foreignKey: {
+  //   //     name: "product_id",
+  //   //     allowNull: false,
+  //   //   },
+  //   //   as: "product",
+  //   // });
+  //   stock.belongsTo(models.product, {
+  //     foreignKey: "product_id",
+  //     as: "product",
+  //   });
+  // };
   return stock;
 };

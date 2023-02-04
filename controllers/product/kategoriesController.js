@@ -1,8 +1,9 @@
-const { kategories } = require("../../models");
+const { kategories, product, stock } = require("../../models");
 const sequelize = require("sequelize");
 const { Op } = require("sequelize");
 
 module.exports = {
+  //GET ALL BUT ONLY FROM KATEGORI TABLE
   getKategori: async (req, res) => {
     const getData = await kategories.findAll();
     if (getData.length < 1) {
@@ -20,6 +21,27 @@ module.exports = {
   kategoriById: async (req, res) => {
     const { id } = req.params;
     const getdata = await kategories.findOne({
+      attributes: [
+        ["nama", "nama"],
+        ["deskripsi", "deskripsi"],
+      ],
+      include: [
+        {
+          model: product,
+          attributes: [
+            ["harga", "harga"],
+            ["tahun_keluaran", "tahun_keluaran"],
+            ["warna", "warna"],
+          ],
+          include: [
+            {
+              model: stock,
+              attributes: [["stock", "stock"]],
+            },
+          ],
+        },
+      ],
+      group: ["kategories.id"],
       where: {
         id: id,
       },
@@ -41,6 +63,27 @@ module.exports = {
     const searchTerm = req.query.name.toLowerCase();
 
     const getData = await kategories.findAll({
+      attributes: [
+        ["nama", "nama"],
+        ["deskripsi", "deskripsi"],
+      ],
+      include: [
+        {
+          model: product,
+          attributes: [
+            ["harga", "harga"],
+            ["tahun_keluaran", "tahun_keluaran"],
+            ["warna", "warna"],
+          ],
+          include: [
+            {
+              model: stock,
+              attributes: [["stock", "stock"]],
+            },
+          ],
+        },
+      ],
+      group: ["kategories.id"],
       where: sequelize.where(sequelize.fn("lower", sequelize.col("nama")), {
         [Op.like]: "%" + searchTerm.toLowerCase() + "%",
       }),
@@ -66,6 +109,38 @@ module.exports = {
       status: 200,
       message: "success get data",
       response: getData,
+    });
+  },
+  //GET ALL PRODUCT IN DETAIL
+  allProdInfo: async (req, res) => {
+    const allInfo = await kategories.findAll({
+      attributes: [
+        ["nama", "nama"],
+        ["deskripsi", "deskripsi"],
+      ],
+      include: [
+        {
+          model: product,
+          attributes: [
+            ["harga", "harga"],
+            ["tahun_keluaran", "tahun_keluaran"],
+            ["warna", "warna"],
+          ],
+          include: [
+            {
+              model: stock,
+              attributes: [["stock", "stock"]],
+            },
+          ],
+        },
+      ],
+      group: ["kategories.id"],
+    });
+
+    res.status(200).json({
+      status: 200,
+      message: "oke",
+      response: allInfo,
     });
   },
 };

@@ -69,10 +69,10 @@ module.exports = {
 
     res.status(200).json({
       status: 200,
-      message: "success login",
-      id: data.id,
-      access_token: accessToken,
-      refresh_token: refreshToken,
+      message: "Success Login",
+      // id: data.id,
+      // access_token: accessToken,
+      // refresh_token: refreshToken,
     });
   },
 };
